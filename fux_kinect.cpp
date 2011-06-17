@@ -48,7 +48,7 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
 
   m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.data = NULL;
-  m_pixBlock.image.setCsizeByFormat(GL_RGB);
+  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
 
   m_width=640;
   m_height=480;
@@ -279,11 +279,16 @@ void fux_kinect :: render(GemState *state)
 	pthread_mutex_unlock(gl_backbuf_mutex);
 	
 	unsigned char *pixels = m_pixBlock.image.data;
+	
 	uint8_t *depth_pixel = depth_front;
+		
 	for(int y = 0; y < kinect_video_size; y++) {
-			pixels[3*y+chRed]   = depth_pixel[3*y];
-			pixels[3*y+chGreen] = depth_pixel[3*y+1];
-			pixels[3*y+chBlue]  = depth_pixel[3*y+2];
+			pixels[0] = 255; //alpha
+			pixels[1] = depth_pixel[0]; //red
+			pixels[2] = depth_pixel[1]; //green
+			pixels[3] = depth_pixel[2]; //blue
+			pixels += 4;
+			depth_pixel +=3;
 	}
 	
 	m_pixBlock.newimage = 1;
