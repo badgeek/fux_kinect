@@ -52,8 +52,8 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
 
   m_width=640;
   m_height=480;
-
   kinect_video_size = m_width * m_height;
+
   requested_format = FREENECT_VIDEO_RGB;
   current_format   = FREENECT_VIDEO_RGB;
   kinect_angle     = 0;
@@ -155,7 +155,10 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
 	uint16_t *depth = (uint16_t*)v_depth;
 
 	pthread_mutex_lock(gl_backbuf_mutex);
+		
+	
 	for (i=0; i<640*480; i++) {
+
 		int pval = t_gamma[depth[i]];
 		int lb = pval & 0xff;
 		switch (pval>>8) {
@@ -194,9 +197,10 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
 				depth_mid[3*i+1] = 0;
 				depth_mid[3*i+2] = 0;
 				break;
+				
 		}
 	}
-
+    
 	got_depth++;
 	pthread_cond_signal(gl_frame_cond);
 	pthread_mutex_unlock(gl_backbuf_mutex);
