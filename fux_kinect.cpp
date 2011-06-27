@@ -311,9 +311,12 @@ void fux_kinect :: render(GemState *state)
 	  	
 		if (pFile!=NULL)
 	  	{
-			for(int y = 0; y < kinect_video_size; y++) {
-				fprintf(pFile,"%i,%i,%i\n", depth_pixel[0], depth_pixel[1], depth_pixel[2]);
-				depth_pixel +=3;
+			int cnt = 0;
+			for(int y = 0; y < 480; y++) {
+				for(int x = 0; x < 640; x++) {
+					fprintf(pFile,"%i,%i,%i\n",x * 10, y * 10, depth_pixel[cnt]);
+					cnt++;
+				}
 			}
 	    	fclose (pFile);
 	  	}
