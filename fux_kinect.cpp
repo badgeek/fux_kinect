@@ -372,6 +372,15 @@ void fux_kinect :: saveKinectPoint()
 }
 
 /////////////////////////////////////////////////////////
+// kinectMultiply
+//
+/////////////////////////////////////////////////////////
+void fux_kinect :: kinectMultiply(float size)
+{
+	kinect_multiply = size;
+}
+
+/////////////////////////////////////////////////////////
 // cleanImage
 //
 /////////////////////////////////////////////////////////
@@ -393,6 +402,7 @@ void fux_kinect :: cleanImage()
 void fux_kinect :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&fux_kinect::kinectAngleCallback, gensym("kinect_angle"), A_FLOAT, A_NULL);
+    class_addmethod(classPtr, (t_method)&fux_kinect::kinectMultiplyCallback, gensym("kinect_multiply"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr,(t_method)&fux_kinect::saveKinectPointCallback, gensym("save"), A_NULL, A_NULL);
 }
 
@@ -400,6 +410,12 @@ void fux_kinect :: kinectAngleCallback(void *data, t_floatarg size)
 {
     GetMyClass(data)->kinectAngle((float)size);
 }
+
+void fux_kinect :: kinectMultiplyCallback(void *data, t_floatarg size)
+{
+    GetMyClass(data)->kinectMultiply((float)size);
+}
+
 
 void fux_kinect :: saveKinectPointCallback(void *data)
 {
