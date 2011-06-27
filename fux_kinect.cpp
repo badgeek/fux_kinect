@@ -108,7 +108,7 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
   }
 
   banged = false;
-
+  kinect_size = 10;
 }
 
 
@@ -314,7 +314,7 @@ void fux_kinect :: render(GemState *state)
 			int cnt = 0;
 			for(int y = 0; y < 480; y++) {
 				for(int x = 0; x < 640; x++) {
-					fprintf(pFile,"%i,%i,%i\n",x * 10, y * 10, depth_pixel[cnt]);
+					fprintf(pFile,"%i,%i,%i\n",x * kinect_size, y * kinect_size, depth_pixel[cnt]);
 					cnt++;
 				}
 			}
