@@ -98,6 +98,7 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
   got_rgb = 0;
   got_depth = 0;
 
+  //depth map representation
   int i;
   for (i=0; i<2048; i++) {
   	float v = i/2048.0;
@@ -333,7 +334,14 @@ void fux_kinect :: kinectAngle(float gsize)
 	 }
 }
 
-
+/////////////////////////////////////////////////////////
+// saveKinectPoint
+//
+/////////////////////////////////////////////////////////
+void fux_kinect :: saveKinectPoint()
+{
+	post("save kinect point\n");
+}
 
 /////////////////////////////////////////////////////////
 // cleanImage
@@ -357,6 +365,7 @@ void fux_kinect :: cleanImage()
 void fux_kinect :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&fux_kinect::kinectAngleCallback,gensym("kinect_angle"), A_FLOAT, A_NULL);
+	class_addbang(classPtr,(t_method)&fux_kinect::saveKinectPointCallback);
 }
 
 void fux_kinect :: kinectAngleCallback(void *data, t_floatarg size)
@@ -364,5 +373,9 @@ void fux_kinect :: kinectAngleCallback(void *data, t_floatarg size)
     GetMyClass(data)->kinectAngle((float)size);
 }
 
+void fux_kinect :: saveKinectPointCallback(void *data)
+{
+	GetMyClass(data)->saveKinectPoint();
+}
 
 

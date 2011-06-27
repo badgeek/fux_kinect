@@ -59,7 +59,11 @@ class GEM_EXTERN fux_kinect : public GemBase
     	virtual ~fux_kinect();
 
     	//////////
-    	// When a snap is received
+		
+		// save point cloud
+		void saveKinectPoint();
+
+    	// When a angle is received
     	virtual void	kinectAngle(float gsize);
 
 		///start rendering
@@ -113,7 +117,10 @@ class GEM_EXTERN fux_kinect : public GemBase
     	
     //////////
     // static member functions
-	static void     kinectAngleCallback(void *data, t_floatarg size);
+	static void kinectAngleCallback(void *data, t_floatarg size);
+	static void saveKinectPointCallback(void *data);
+	
+	
 		
 	freenect_context *f_ctx;
 	freenect_device *f_dev;	
