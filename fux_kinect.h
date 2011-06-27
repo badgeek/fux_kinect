@@ -109,10 +109,6 @@ class GEM_EXTERN fux_kinect : public GemBase
 		static void rgb_cb(freenect_device *dev, void *rgb, uint32_t timestamp);
 		
 		
-	//////////
-	// Glitch Data
-	int GLITCH_AMOUNT;	
-
     private:
     	
     //////////
