@@ -40,6 +40,8 @@
 #X floatatom 316 295 5 0 0 0 - - -;
 #X obj 316 316 s tilt;
 #X msg 37 183 save;
+#X floatatom 40 85 5 0 0 0 - - -;
+#X msg 36 134 kinect_multiply \$1;
 #X connect 0 0 3 0;
 #X connect 1 0 3 0;
 #X connect 2 0 4 1;
@@ -73,3 +75,5 @@
 #X connect 33 0 34 0;
 #X connect 34 0 35 0;
 #X connect 36 0 4 0;
+#X connect 37 0 38 0;
+#X connect 38 0 4 0;
