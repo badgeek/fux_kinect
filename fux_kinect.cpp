@@ -34,12 +34,14 @@ CPPEXTERN_NEW_WITH_GIMME(fux_kinect)
 
 static pthread_cond_t  *gl_frame_cond;
 static pthread_mutex_t *gl_backbuf_mutex;
-uint8_t *rgb_back, *rgb_mid, *rgb_front;
 
+uint8_t *rgb_back, *rgb_mid, *rgb_front;
 uint16_t t_gamma[2048];
 uint8_t *depth_mid, *depth_front;
+
 int got_rgb;
 int got_depth;
+int global_depth[307200];
 
 fux_kinect :: fux_kinect(int argc, t_atom *argv)
     	  : m_originalImage(NULL)
@@ -162,7 +164,9 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
 		
 	
 	for (i=0; i<640*480; i++) {
-
+		
+		global_depth[i] = depth[i];
+		
 		int pval = t_gamma[depth[i]];
 		int lb = pval & 0xff;
 		switch (pval>>8) {
@@ -314,7 +318,7 @@ void fux_kinect :: render(GemState *state)
 			int cnt = 0;
 			for(int y = 0; y < 480; y++) {
 				for(int x = 0; x < 640; x++) {
-					fprintf(pFile,"%i,%i,%i\n",x * kinect_multiply, y * kinect_multiply, depth_pixel[cnt]);
+					fprintf(pFile,"%i,%i,%i\n",x * kinect_multiply, y * kinect_multiply, global_depth[cnt]);
 					cnt++;
 				}
 			}
