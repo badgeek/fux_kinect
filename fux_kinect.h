@@ -130,9 +130,10 @@ class GEM_EXTERN fux_kinect : public GemBase
 		
 	pthread_t freenect_thread;
 
-	
 	int kinect_angle;
 	int kinect_video_size;
+	
+	bool banged;
 
 };
 

@@ -106,6 +106,8 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
   	t_gamma[i] = v*6*256;
   }
 
+  banged = false;
+
 }
 
 
@@ -296,6 +298,12 @@ void fux_kinect :: render(GemState *state)
 			depth_pixel +=3;
 	}
 	
+	if(banged == true)
+	{
+		post("save point cloud here");
+		banged = false;
+	}
+	
 	m_pixBlock.newimage = 1;
 	m_pixBlock.image.notowned = true;
 	m_pixBlock.image.upsidedown = true;
@@ -340,7 +348,7 @@ void fux_kinect :: kinectAngle(float gsize)
 /////////////////////////////////////////////////////////
 void fux_kinect :: saveKinectPoint()
 {
-	post("save kinect point\n");
+	banged = true;
 }
 
 /////////////////////////////////////////////////////////
