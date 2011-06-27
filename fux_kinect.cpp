@@ -304,13 +304,16 @@ void fux_kinect :: render(GemState *state)
 		post("Saving point cloud..");
 		banged = false;
 		
+		//char str[20];
+		
 		FILE * pFile;
 	  	pFile = fopen ("myfile.txt","w");
 	  	
 		if (pFile!=NULL)
 	  	{
 			for(int y = 0; y < kinect_video_size; y++) {
-				fputs (depth_pixel[y],pFile);
+				fprintf(pFile,"%i,%i,%i\n", depth_pixel[0], depth_pixel[1], depth_pixel[2]);
+				depth_pixel +=3;
 			}
 	    	fclose (pFile);
 	  	}
