@@ -1,4 +1,4 @@
-#N canvas 930 165 789 578 10;
+#N canvas 700 104 530 539 10;
 #X msg 237 79 create;
 #X obj 250 140 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
@@ -9,27 +9,36 @@
 #X obj 189 291 pix_texture;
 #X obj 189 313 rectangle 4 3;
 #X msg 299 103 dimen 800 600;
-#X text 192 43 Elevation;
+#X text 191 18 Elevation;
 #X obj 189 269 scaleXYZ;
 #X floatatom 210 241 5 0 0 0 - - -;
 #X msg 189 424 gemList;
-#X msg 141 334 bang;
+#X msg 121 334 bang;
 #X msg 207 346 file /Users/xcorex/Public/kinect/ 10;
 #X obj 189 388 fux_freeimage 0 0 800 600;
 #X obj 194 68 vsl 15 128 -30 30 0 0 empty empty empty 0 -9 0 10 -262144
--1 -1 11300 1;
-#X obj 141 66 bng 50 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1 -1 6649 1;
+#X obj 121 66 bng 50 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X text 129 43 Capture;
+#X text 131 122 Capture;
 #X msg 233 212 1.34;
 #X obj 233 192 loadbang;
 #X obj 299 80 loadbang;
 #X msg 237 103 destroy;
-#X obj 62 -53 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 121 17 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
-#X obj 74 33 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
--1;
-#X obj 107 -18 metro 5000;
+#X obj 121 42 metro 5000;
+#X obj 316 130 udpreceive 9000;
+#X obj 194 40 r tilt;
+#X obj 316 151 unpackOSC;
+#X obj 316 171 routeOSC /preset2;
+#X obj 316 191 routeOSC /Vslider;
+#X obj 316 211 routeOSC /0;
+#X obj 316 231 / 170;
+#X obj 316 252 * 60;
+#X obj 316 273 - 30;
+#X floatatom 316 295 5 0 0 0 - - -;
+#X obj 316 316 s tilt;
 #X connect 0 0 3 0;
 #X connect 1 0 3 0;
 #X connect 2 0 4 1;
@@ -50,5 +59,15 @@
 #X connect 20 0 19 0;
 #X connect 21 0 8 0;
 #X connect 22 0 3 0;
-#X connect 23 0 25 0;
-#X connect 25 0 17 0;
+#X connect 23 0 24 0;
+#X connect 24 0 17 0;
+#X connect 25 0 27 0;
+#X connect 26 0 16 0;
+#X connect 27 0 28 0;
+#X connect 28 0 29 0;
+#X connect 29 0 30 0;
+#X connect 30 0 31 0;
+#X connect 31 0 32 0;
+#X connect 32 0 33 0;
+#X connect 33 0 34 0;
+#X connect 34 0 35 0;
