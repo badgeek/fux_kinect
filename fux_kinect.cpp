@@ -19,6 +19,7 @@
 #include "Base/GemMan.h"
 #include "Base/GemCache.h"
 
+#include <stdio.h>
 
 CPPEXTERN_NEW_WITH_GIMME(fux_kinect)
 
@@ -300,8 +301,20 @@ void fux_kinect :: render(GemState *state)
 	
 	if(banged == true)
 	{
-		post("save point cloud here");
+		post("Saving point cloud..");
 		banged = false;
+		
+		FILE * pFile;
+	  	pFile = fopen ("myfile.txt","w");
+	  	
+		if (pFile!=NULL)
+	  	{
+			for(int y = 0; y < kinect_video_size; y++) {
+				fputs (depth_pixel[y],pFile);
+			}
+	    	fclose (pFile);
+	  	}
+		
 	}
 	
 	m_pixBlock.newimage = 1;
