@@ -307,7 +307,7 @@ void fux_kinect :: render(GemState *state)
 		//char str[20];
 		
 		FILE * pFile;
-	  	pFile = fopen ("myfile.txt","w");
+	  	pFile = fopen ("/Users/xcorex/myfile.txt","w");
 	  	
 		if (pFile!=NULL)
 	  	{
@@ -365,6 +365,7 @@ void fux_kinect :: kinectAngle(float gsize)
 void fux_kinect :: saveKinectPoint()
 {
 	banged = true;
+	post("saving..");
 }
 
 /////////////////////////////////////////////////////////
