@@ -51,7 +51,7 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
 
   m_pixBlock.image = m_imageStruct;
   m_pixBlock.image.data = NULL;
-  m_pixBlock.image.setCsizeByFormat(GL_RGBA);
+  m_pixBlock.image.setCsizeByFormat(GL_LUMINANCE);
 
   m_width=640;
   m_height=480;
@@ -92,11 +92,11 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
 	  }
   }
 
-  depth_mid = (uint8_t*)malloc(640*480*3);
-  depth_front = (uint8_t*)malloc(640*480*3);
-  rgb_back = (uint8_t*)malloc(640*480*3);
-  rgb_mid = (uint8_t*)malloc(640*480*3);
-  rgb_front = (uint8_t*)malloc(640*480*3);
+  depth_mid = (uint8_t*)malloc(640*480);
+  depth_front = (uint8_t*)malloc(640*480);
+  rgb_back = (uint8_t*)malloc(640*480);
+  rgb_mid = (uint8_t*)malloc(640*480);
+  rgb_front = (uint8_t*)malloc(640*480);
 
   got_rgb = 0;
   got_depth = 0;
@@ -104,7 +104,7 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
   //depth map representation
   int i;
   for (i=0; i<2048; i++) {
-  	float v = i/2048.0;
+  	float v = i/2047.0;
   	v = powf(v, 3)* 6;
   	t_gamma[i] = v*6*256;
   }
@@ -166,48 +166,27 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
 	
 	for (i=0; i<640*480; i++) {
 		
+		
+		
+		//int kinect_pixel = floor(1-(depth[i]/2047))*255;
+		
+		//depth_mid[i] = kinect_pixel; //(0xFF) << 24 | (kinect_pixel & 0xFF) << 16 | (kinect_pixel & 0xFF) << 8 | (kinect_pixel & 0xFF) << 0;
+		
 		global_depth[i] = depth[i];
 		
-		int pval = t_gamma[depth[i]];
-		int lb = pval & 0xff;
-		switch (pval>>8) {
-			case 0:
-				depth_mid[3*i+0] = 255;
-				depth_mid[3*i+1] = 255-lb;
-				depth_mid[3*i+2] = 255-lb;
-				break;
-			case 1:
-				depth_mid[3*i+0] = 255;
-				depth_mid[3*i+1] = lb;
-				depth_mid[3*i+2] = 0;
-				break;
-			case 2:
-				depth_mid[3*i+0] = 255-lb;
-				depth_mid[3*i+1] = 255;
-				depth_mid[3*i+2] = 0;
-				break;
-			case 3:
-				depth_mid[3*i+0] = 0;
-				depth_mid[3*i+1] = 255;
-				depth_mid[3*i+2] = lb;
-				break;
-			case 4:
-				depth_mid[3*i+0] = 0;
-				depth_mid[3*i+1] = 255-lb;
-				depth_mid[3*i+2] = 255;
-				break;
-			case 5:
-				depth_mid[3*i+0] = 0;
-				depth_mid[3*i+1] = 0;
-				depth_mid[3*i+2] = 255-lb;
-				break;
-			default:
-				depth_mid[3*i+0] = 0;
-				depth_mid[3*i+1] = 0;
-				depth_mid[3*i+2] = 0;
-				break;
-				
+		float jarak_minimum = 800.f;
+		int pval;
+		if(depth[i] < jarak_minimum )
+		{
+			pval = ceil((1-(depth[i]/jarak_minimum))*255.f);	
+		}else{
+			pval = 0;	
 		}
+		
+		
+		//int lb = (0xFF) << 24 | (pval & 0xFF) << 16 | (pval & 0xFF) << 8 | (pval & 0xFF) << 0;;
+		depth_mid[i] = pval;
+		
 	}
     
 	got_depth++;
@@ -296,12 +275,7 @@ void fux_kinect :: render(GemState *state)
 	uint8_t *depth_pixel = depth_front;
 		
 	for(int y = 0; y < kinect_video_size; y++) {
-			pixels[0] = 255; //alpha
-			pixels[1] = depth_pixel[0]; //red
-			pixels[2] = depth_pixel[1]; //green
-			pixels[3] = depth_pixel[2]; //blue
-			pixels += 4;
-			depth_pixel +=3;
+		pixels[y] = depth_pixel[y];
 	}
 	
 	m_pixBlock.newimage = 1;
@@ -314,7 +288,7 @@ void fux_kinect :: render(GemState *state)
 void fux_kinect :: startRendering(){	
   m_pixBlock.image.xsize = m_width;
   m_pixBlock.image.ysize = m_height;
-  m_pixBlock.image.csize = 4; //RGBA
+  m_pixBlock.image.csize = 1; //GRAY
   m_pixBlock.image.reallocate();
   //m_rendering=true;
 }
