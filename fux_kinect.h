@@ -59,6 +59,7 @@ class GEM_EXTERN fux_kinect : public GemBase
     	virtual ~fux_kinect();
 
     	//////////
+	//	void kinectResolution(float resolution);
 		
 		// save point cloud
 		void saveKinectPoint();
@@ -124,7 +125,8 @@ class GEM_EXTERN fux_kinect : public GemBase
 	static void kinectAngleCallback(void *data, t_floatarg size);
 	static void saveKinectPointCallback(void *data);
 	static void kinectMultiplyCallback(void *data, t_floatarg size);
-		
+	static void kinectResolutionCallback(void *data, t_floatarg size);	
+	
 	freenect_context *f_ctx;
 	freenect_device *f_dev;	
 
@@ -136,6 +138,7 @@ class GEM_EXTERN fux_kinect : public GemBase
 	int kinect_angle;
 	int kinect_video_size;
 	int kinect_multiply;
+	int kinect_resolution;
 	
 	bool banged;
 

@@ -111,6 +111,7 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
 
   banged = false;
   kinect_multiply = 10;
+  kinect_resolution = 1;
 }
 
 
@@ -303,30 +304,6 @@ void fux_kinect :: render(GemState *state)
 			depth_pixel +=3;
 	}
 	
-	if(banged == true)
-	{
-		post("Saving point cloud..");
-		banged = false;
-		
-		//char str[20];
-		
-		FILE * pFile;
-	  	pFile = fopen ("/Users/xcorex/myfile.txt","w");
-	  	
-		if (pFile!=NULL)
-	  	{
-			int cnt = 0;
-			for(int y = 0; y < 480; y++) {
-				for(int x = 0; x < 640; x++) {
-					fprintf(pFile,"%i,%i,%i\n",x * kinect_multiply, y * kinect_multiply, global_depth[cnt]);
-					cnt++;
-				}
-			}
-	    	fclose (pFile);
-	  	}
-		
-	}
-	
 	m_pixBlock.newimage = 1;
 	m_pixBlock.image.notowned = true;
 	m_pixBlock.image.upsidedown = true;
@@ -399,6 +376,13 @@ void fux_kinect :: cleanImage()
     }
 }
 
+
+//void fux_kinect :: kinectResolution(float resolution)
+//{
+//	kinect_resolution = resolution;
+//	post("kinect resolution...");
+//}
+
 /////////////////////////////////////////////////////////
 // static member functions
 //
@@ -407,8 +391,14 @@ void fux_kinect :: obj_setupCallback(t_class *classPtr)
 {
     class_addmethod(classPtr, (t_method)&fux_kinect::kinectAngleCallback, gensym("kinect_angle"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&fux_kinect::kinectMultiplyCallback, gensym("kinect_multiply"), A_FLOAT, A_NULL);
+  //  class_addmethod(classPtr, (t_method)&fux_kinect::kinectResolutionCallback, gensym("kinect_resolution"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr,(t_method)&fux_kinect::saveKinectPointCallback, gensym("save"), A_NULL, A_NULL);
 }
+
+//void fux_kinect :: kinectResolutionCallback(void *data, t_floatarg size)
+//{
+ //   GetMyClass(data)->kinectResolution((float)size);
+//}
 
 void fux_kinect :: kinectAngleCallback(void *data, t_floatarg size)
 {
