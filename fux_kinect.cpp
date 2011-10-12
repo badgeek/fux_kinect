@@ -41,6 +41,10 @@ uint8_t *depth_mid, *depth_front;
 
 int got_rgb;
 int got_depth;
+
+int kinect_max;
+int kinect_min;
+
 //int global_depth[307200];
 
 fux_kinect :: fux_kinect(int argc, t_atom *argv)
@@ -170,7 +174,20 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
 			
 	for (i=0; i<640*480; i++) {		
 		//global_depth[i] = depth[i];
-		depth_mid[i] = depth[i];
+		//depth_mid[i] = depth[i];
+		
+	   int pval;
+	   if(depth[i] < kinect_max )
+	   {
+	       pval = ceil((1-(depth[i]/kinect_max))*255.f);    
+	   }else{
+	       pval = 0;    
+	   }
+	   
+	   
+	   //int lb = (0xFF) << 24 | (pval & 0xFF) << 16 | (pval & 0xFF) << 8 | (pval & 0xFF) << 0;;
+	   depth_mid[i] = pval;
+		
 	}
     
 	got_depth++;
@@ -260,12 +277,7 @@ void fux_kinect :: render(GemState *state)
 	int pval;
 		
 	for(int y = 0; y < kinect_video_size; y++) {
-		if(depth_pixel[y] > kinect_min && depth_pixel[y] < kinect_max )
-		{
-			pixels[y] = ceil((1-(depth_pixel[y]/kinect_max))*255.f);	
-		}else{
-			pixels[y] = 0;	
-		}
+			pixels[y] = depth_pixel[y];	
 	}
 	
 	m_pixBlock.newimage = 1;
@@ -306,6 +318,15 @@ void fux_kinect :: kinectAngle(float gsize)
 	 }
 }
 
+void fux_kinect :: kinectMin(int gsize)
+{
+	kinect_min = gsize;
+}
+
+void fux_kinect :: kinectMax(int gsize)
+{
+	kinect_max = gsize;	
+}
 /////////////////////////////////////////////////////////
 // cleanImage
 //
@@ -337,7 +358,6 @@ void fux_kinect :: obj_setupCallback(t_class *classPtr)
     class_addmethod(classPtr, (t_method)&fux_kinect::kinectAngleCallback, gensym("kinect_angle"), A_FLOAT, A_NULL);
 	class_addmethod(classPtr, (t_method)&fux_kinect::kinectMaxCallback, gensym("kinect_max"), A_FLOAT, A_NULL);
     class_addmethod(classPtr, (t_method)&fux_kinect::kinectMinCallback, gensym("kinect_min"), A_FLOAT, A_NULL);
-    
 }
 
 void fux_kinect :: kinectAngleCallback(void *data, t_floatarg size)
@@ -347,11 +367,11 @@ void fux_kinect :: kinectAngleCallback(void *data, t_floatarg size)
 
 void fux_kinect :: kinectMaxCallback(void *data, t_floatarg size)
 {
-	GetMyClass(data)->kinect_max = (int)size;
+	GetMyClass(data)->kinectMax((int)size);
 }
 
 void fux_kinect :: kinectMinCallback(void *data, t_floatarg size)
 {
-	GetMyClass(data)->kinect_min = (int)size;
+	GetMyClass(data)->kinectMin((int)size);
 }
 
