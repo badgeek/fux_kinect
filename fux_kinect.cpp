@@ -177,9 +177,11 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
 		//depth_mid[i] = depth[i];
 		
 	   int pval;
-	   if(depth[i] < kinect_max )
+	float jarak_minimum = 800.f;
+	
+	   if(depth[i] < (float)kinect_max )
 	   {
-	       pval = ceil((1-(depth[i]/kinect_max))*255.f);    
+	       pval = ceil((1-(depth[i]/(float)kinect_max))*255.f);    
 	   }else{
 	       pval = 0;    
 	   }
