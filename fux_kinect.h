@@ -62,10 +62,10 @@ class GEM_EXTERN fux_kinect : public GemBase
 	//	void kinectResolution(float resolution);
 		
 		// save point cloud
-		void saveKinectPoint();
+		//void saveKinectPoint();
 
 		// multiply distance between point
-		void kinectMultiply(float size);
+		//void kinectMultiply(float size);
 		
 
     	// When a angle is received
@@ -97,35 +97,38 @@ class GEM_EXTERN fux_kinect : public GemBase
     	
     	//////////
     	// The x position
-    	int     	m_x;
+    	int m_x;
     	
     	//////////
     	// The y position
-    	int     	m_y;
+    	int m_y;
     	
     	//////////
     	// The width
-    	int     	m_width;
+    	int m_width;
     	
     	//////////
     	// The height
-    	int     	m_height;
+    	int m_height;
 		
+		// 
 		
 		//Kinect
 		static void* freenect_thread_func(void*);
 		static void depth_cb(freenect_device *dev, void *v_depth, uint32_t timestamp);
 		static void rgb_cb(freenect_device *dev, void *rgb, uint32_t timestamp);
 		
+		int kinect_max;
+		int kinect_min;
+		
 		
     private:
     	
     //////////
     // static member functions
-	static void kinectAngleCallback(void *data, t_floatarg size);
-	static void saveKinectPointCallback(void *data);
-	static void kinectMultiplyCallback(void *data, t_floatarg size);
-	static void kinectResolutionCallback(void *data, t_floatarg size);	
+	static void kinectAngleCallback(void *data, t_floatarg size);	
+	static void kinectMaxCallback(void *data, t_floatarg size);	
+	static void kinectMinCallback(void *data, t_floatarg size);	
 	
 	freenect_context *f_ctx;
 	freenect_device *f_dev;	
@@ -139,6 +142,7 @@ class GEM_EXTERN fux_kinect : public GemBase
 	int kinect_video_size;
 	int kinect_multiply;
 	int kinect_resolution;
+	
 	
 	bool banged;
 
