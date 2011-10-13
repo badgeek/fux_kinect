@@ -119,7 +119,7 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
   banged = false;
   kinect_multiply = 10;
   kinect_resolution = 1;
-  kinect_max = 1000;
+  kinect_max = 2048;
   kinect_min = 0;
 }
 
@@ -177,19 +177,15 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
 		//depth_mid[i] = depth[i];
 		
 	   int pval;
-	float jarak_minimum = 800.f;
 	
-	   if(depth[i] < (float)kinect_max )
+	   if(depth[i] >  (float)kinect_min && depth[i] < (float)kinect_max )
 	   {
 	       pval = ceil((1-(depth[i]/(float)kinect_max))*255.f);    
 	   }else{
 	       pval = 0;    
 	   }
-	   
-	   
 	   //int lb = (0xFF) << 24 | (pval & 0xFF) << 16 | (pval & 0xFF) << 8 | (pval & 0xFF) << 0;;
-	   depth_mid[i] = pval;
-		
+	   depth_mid[i] = pval;		
 	}
     
 	got_depth++;
