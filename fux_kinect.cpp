@@ -171,16 +171,27 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
 	uint16_t *depth = (uint16_t*)v_depth;
 
 	pthread_mutex_lock(gl_backbuf_mutex);
-			
+	
+	int depth_range = kinect_max - kinect_min;
+
+
 	for (i=0; i<640*480; i++) {		
 		//global_depth[i] = depth[i];
 		//depth_mid[i] = depth[i];
 		
 	   int pval;
 	
-	   if(depth[i] >  (float)kinect_min && depth[i] < (float)kinect_max )
+	   if(depth[i] > (float)kinect_min)
 	   {
-	       pval = ceil((1-(depth[i]/(float)kinect_max))*255.f);    
+
+		if (depth[i] > (float)kinect_max)
+		{
+		 pval = 0;
+		}else{
+		 //depth[i] - kinect_max
+	         pval = (1 - (depth[i] - (float)kinect_min)/(float)depth_range) * 255.f;//ceil((1-(depth[i]/(float)kinect_max))*255.f);    
+		}
+
 	   }else{
 	       pval = 0;    
 	   }
