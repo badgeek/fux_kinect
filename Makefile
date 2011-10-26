@@ -18,7 +18,7 @@ ifeq ($(UNAME),Linux)
 endif
 ifeq ($(UNAME),Darwin)
  CPPFLAGS += -DDARWIN
- INCLUDES +=  -I/sw/include -I/sw/include/FTGL -I/sw/include/freetype2 -I$(GEM_DIR)/src -I/usr/include/FTGL -I/usr/include/freetype2 -I$(PD_DIR)/src -I$(PD_DIR) -I./
+ INCLUDES +=  -I/sw/include -I$(GEM_DIR)/src -I/usr/include/freetype2 -I$(PD_DIR)/src -I$(PD_DIR) -I./
  LDFLAGS = -c -arch i386 
  LIBS =  -lm -lfreenect
  EXTENSION = pd_darwin
