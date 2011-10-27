@@ -37,6 +37,7 @@ deploy:
 	./embed-MacOSX-dependencies.sh .
 	mv *.dylib build/$(SOURCES)
 	mv *.$(EXTENSION) build/$(SOURCES)
+	cp *.pd build/$(SOURCES)
 	rm -fr $(PD_APP_DIR)/extra/$(SOURCES)
 	mv build/$(SOURCES) $(PD_APP_DIR)/extra/
 clean:
