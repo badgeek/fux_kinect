@@ -12,8 +12,12 @@
 3. Compile -> make all
 4. Deploy -> sudo make deploy
 
-## Update!:
+## Download Binary!:
 
 precompiled binary for osx snow leopard
 https://github.com/downloads/badgeek/fux_kinect/fux_kinect.zip
 extract and drop fux_kinect to extra folder inside pd extra (external)  directory
+
+## Author
+
+http://manticore.deadmediafm.org
