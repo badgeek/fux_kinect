@@ -1,6 +1,6 @@
-Kinect external for puredata
+# Kinect external for puredata
 
-== How to Compile ==
+## How to Compile
 
 1.Download pd-extended source, install libfreenect using fink
 
@@ -14,7 +14,7 @@ Kinect external for puredata
 3. Compile -> make all
 4. Deploy -> sudo make deploy
 
-== Update!: ==
+## Update!:
 
 precompiled binary for osx snow leopard
 https://github.com/downloads/badgeek/fux_kinect/fux_kinect.zip
