@@ -18,7 +18,7 @@ ifeq ($(UNAME),Linux)
 endif
 ifeq ($(UNAME),Darwin)
  CPPFLAGS += -DDARWIN
- INCLUDES +=  -I/sw/include -I$(GEM_DIR)/src -I/usr/include/freetype2 -I$(PD_DIR)/src -I$(PD_DIR) -I./
+ INCLUDES +=  -I/sw/include -I$(GEM_DIR)/src -I$(PD_DIR)/src -I$(PD_DIR) -I./
  LDFLAGS = -c -arch i386 
  LIBS =  -lm -lfreenect
  EXTENSION = pd_darwin
@@ -30,7 +30,7 @@ SOURCES = fux_kinect
 
 all:
 	g++ $(LDFLAGS) $(INCLUDES) $(CPPFLAGS) -o $(SOURCES).o -c $(SOURCES).cpp
-	g++ -o $(SOURCES).$(EXTENSION) -undefined dynamic_lookup -arch i386 -dynamiclib -mmacosx-version-min=10.3 -undefined dynamic_lookup -framework QuickTime -framework Carbon -framework AGL -framework OpenGL -arch i386 ./*.o -L/sw/lib -lfreeimage -lftgl -lstdc++ -ldl -lz -lm -lpthread -lfreenect -L$(PD_DIR)/bin -L$(PD_DIR)
+	g++ -o $(SOURCES).$(EXTENSION) -undefined dynamic_lookup -arch i386 -dynamiclib -mmacosx-version-min=10.3 -undefined dynamic_lookup -framework QuickTime -framework Carbon -framework AGL -framework OpenGL -arch i386 ./*.o -L/sw/lib -lfreeimage -lstdc++ -ldl -lz -lm -lpthread -lfreenect -L$(PD_DIR)/bin -L$(PD_DIR)
 	rm -fr ./*.o
 deploy:
 	rm -fr $(PD_APP_DIR)/extra/$(SOURCES).$(EXTENSION)
