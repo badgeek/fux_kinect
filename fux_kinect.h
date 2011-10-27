@@ -69,7 +69,9 @@ class GEM_EXTERN fux_kinect : public GemBase
 		
 
     	// When a angle is received
-    	virtual void	kinectAngle(float gsize);
+    	virtual void kinectAngle(float gsize);
+	virtual void kinectMin(int gsize);
+	virtual void kinectMax(int gsize);
 
 		///start rendering
 		virtual void	startRendering();
@@ -117,10 +119,7 @@ class GEM_EXTERN fux_kinect : public GemBase
 		static void* freenect_thread_func(void*);
 		static void depth_cb(freenect_device *dev, void *v_depth, uint32_t timestamp);
 		static void rgb_cb(freenect_device *dev, void *rgb, uint32_t timestamp);
-		
-		int kinect_max;
-		int kinect_min;
-		
+				
 		
     private:
     	
