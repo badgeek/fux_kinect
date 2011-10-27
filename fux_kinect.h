@@ -17,7 +17,7 @@ LOG
 
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
-#include "FreeImage.h"
+//#include "FreeImage.h"
 #include "libfreenect.h"
 
 #include <pthread.h>
