@@ -1,7 +1,7 @@
 # change to your local directories!
 PD_APP_DIR = /Applications/Pd-extended.app/Contents/Resources
-PD_DIR = $(PD_APP_DIR)/include
-GEM_DIR = $(PD_APP_DIR)/include
+PD_DIR = /Users/xcorex/Documents/Documents/Projects/Puredata/PdSource/Pd-0.42.5-extended/pd
+GEM_DIR = /Users/xcorex/Documents/Documents/Projects/Puredata/PdSource/Pd-0.42.5-extended/Gem
 # build flags
 
 INCLUDES = -I$(PD_DIR)/include
@@ -33,8 +33,12 @@ all:
 	g++ -o $(SOURCES).$(EXTENSION) -undefined dynamic_lookup -arch i386 -dynamiclib -mmacosx-version-min=10.3 -undefined dynamic_lookup -framework QuickTime -framework Carbon -framework AGL -framework OpenGL -arch i386 ./*.o -L/sw/lib -lstdc++ -ldl -lz -lm -lpthread -lfreenect -L$(PD_DIR)/bin -L$(PD_DIR)
 	rm -fr ./*.o
 deploy:
-	rm -fr $(PD_APP_DIR)/extra/$(SOURCES).$(EXTENSION)
-	mv *.$(EXTENSION) $(PD_APP_DIR)/extra/
+	mkdir build/$(SOURCES)
+	./embed-MacOSX-dependencies.sh .
+	mv *.dylib build/$(SOURCES)
+	mv *.$(EXTENSION) build/$(SOURCES)
+	rm -fr $(PD_APP_DIR)/extra/$(SOURCES)
+	mv build/$(SOURCES) $(PD_APP_DIR)/extra/
 clean:
 	rm -f $(SOURCES)*.o
 	rm -f $(SOURCES)*.$(EXTENSION)
