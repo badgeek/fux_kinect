@@ -1,4 +1,5 @@
-# Kinect external for puredata
+Kinect external for puredata
+---------------
 
 ## How to Compile
 
