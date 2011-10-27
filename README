@@ -12,3 +12,10 @@ Kinect external for puredata
 3. Configure path on Makefile
 4. Compile -> make all
 5. Deploy -> make deploy
+
+Update!:
+
+precompiled binary for osx snow leopard
+https://github.com/downloads/badgeek/fux_kinect/fux_kinect.zip
+
+extract and drop file to extra folder on pd
