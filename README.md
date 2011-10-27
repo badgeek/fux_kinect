@@ -20,4 +20,4 @@ extract and drop fux_kinect to extra folder inside pd extra (external)  director
 
 ## Author
 
-http://manticore.deadmediafm.org
+author is dead - http://manticore.deadmediafm.org
