@@ -20,6 +20,7 @@
 #include "Base/GemCache.h"
 
 #include <stdio.h>
+#include <assert.h>
 
 CPPEXTERN_NEW_WITH_GIMME(fux_kinect)
 
@@ -32,7 +33,7 @@ CPPEXTERN_NEW_WITH_GIMME(fux_kinect)
 //
 /////////////////////////////////////////////////////////
 
-static pthread_cond_t  *gl_frame_cond;
+static pthread_cond_t  gl_frame_cond = PTHREAD_COND_INITIALIZER;
 static pthread_mutex_t *gl_backbuf_mutex;
 
 uint8_t *rgb_back, *rgb_mid, *rgb_front;
@@ -77,8 +78,8 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
     } 
   }
 
-  gl_frame_cond = (pthread_cond_t*) malloc(sizeof(pthread_mutex_t));
-  pthread_cond_init(gl_frame_cond, NULL);
+ // gl_frame_cond = (pthread_cond_t*) malloc(sizeof(pthread_mutex_t));
+  //pthread_cond_init(gl_frame_cond, NULL);
 
 
   if (freenect_init(&f_ctx, NULL) < 0) {
@@ -99,11 +100,11 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
 	  }
   }
 
-  depth_mid = (uint8_t*)malloc(640*480);
-  depth_front = (uint8_t*)malloc(640*480);
-  rgb_back = (uint8_t*)malloc(640*480);
-  rgb_mid = (uint8_t*)malloc(640*480);
-  rgb_front = (uint8_t*)malloc(640*480);
+  depth_mid = (uint8_t*)malloc(640*480*3);
+  depth_front = (uint8_t*)malloc(640*480*3);
+  rgb_back = (uint8_t*)malloc(640*480*3);
+  rgb_mid = (uint8_t*)malloc(640*480*3);
+  rgb_front = (uint8_t*)malloc(640*480*3);
 
   got_rgb = 0;
   got_depth = 0;
@@ -200,23 +201,23 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
 	}
     
 	got_depth++;
-	pthread_cond_signal(gl_frame_cond);
+	pthread_cond_signal(&gl_frame_cond);
 	pthread_mutex_unlock(gl_backbuf_mutex);
 }
 
 void fux_kinect::rgb_cb(freenect_device *dev, void *rgb, uint32_t timestamp)
 {
-	pthread_mutex_lock(gl_backbuf_mutex);
+	//pthread_mutex_lock(gl_backbuf_mutex);
 
 	// swap buffers
-	assert (rgb_back == rgb);
-	rgb_back = rgb_mid;
-	freenect_set_video_buffer(dev, rgb_back);
-	rgb_mid = (uint8_t*)rgb;
+	//assert (rgb_back == rgb);
+	//rgb_back = rgb_mid;
+	//freenect_set_video_buffer(dev, rgb_back);
+	//rgb_mid = (uint8_t*)rgb;
 
-	got_rgb++;
-	pthread_cond_signal(gl_frame_cond);
-	pthread_mutex_unlock(gl_backbuf_mutex);
+	//got_rgb++;
+	//pthread_cond_signal(gl_frame_cond);
+	//pthread_mutex_unlock(gl_backbuf_mutex);
 }
 
 
@@ -247,15 +248,15 @@ void fux_kinect :: render(GemState *state)
 	pthread_mutex_lock(gl_backbuf_mutex);
 	// When using YUV_RGB mode, RGB frames only arrive at 15Hz, so we shouldn't force them to draw in lock-step.
 	// However, this is CPU/GPU intensive when we are receiving frames in lockstep.
-	if (current_format == FREENECT_VIDEO_YUV_RGB) {
-		while (!got_depth && !got_rgb) {
-			pthread_cond_wait(gl_frame_cond, gl_backbuf_mutex);
-		}
-	} else {
-		while ((!got_depth || !got_rgb) && requested_format != current_format) {
-			pthread_cond_wait(gl_frame_cond, gl_backbuf_mutex);
-		}
-	}
+	//if (current_format == FREENECT_VIDEO_YUV_RGB) {
+	//	while (!got_depth && !got_rgb) {
+	//		pthread_cond_wait(gl_frame_cond, gl_backbuf_mutex);
+	//	}
+	//} else {
+	//	while ((!got_depth || !got_rgb) && requested_format != current_format) {
+	//		pthread_cond_wait(gl_frame_cond, gl_backbuf_mutex);
+	//	}
+	//}
 
 	if (requested_format != current_format) {
 		pthread_mutex_unlock(gl_backbuf_mutex);
@@ -271,12 +272,12 @@ void fux_kinect :: render(GemState *state)
 		got_depth = 0;
 	}
 	
-	if (got_rgb) {
-		tmp = rgb_front;
-		rgb_front = rgb_mid;
-		rgb_mid = tmp;
-		got_rgb = 0;
-	}
+	//if (got_rgb) {
+	//	tmp = rgb_front;
+	//	rgb_front = rgb_mid;
+	//	rgb_mid = tmp;
+	//	got_rgb = 0;
+	//}
 		
 	pthread_mutex_unlock(gl_backbuf_mutex);
 	
