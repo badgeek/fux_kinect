@@ -10,7 +10,7 @@ ifeq ($(UNAME),Linux)
  CPPFLAGS += -DLINUX
  INCLUDES += -I/usr/include/lqt -fopenmp -I/usr/include/ImageMagick -I/usr/include/lqt -I/usr/include/avifile-0.7 -I/usr/include/FTGL -I/usr/include/freetype2 -I/usr/include/FTGL -I/usr/include/freetype2 -I$(GEM_DIR)/src -I$(PD_DIR)/src -I$(PD_DIR)
  LDFLAGS = -export_dynamic -shared
- LIBS = -shared -Wl,--export-dynamic -lftgl -lv4l2 -lv4l1 -laviplay -L/usr/lib -lquicktime -lpthread -lm -lz -ldl -lquicktime -lpthread -lm -lz -ldl -lMagick++ -lMagickCore -ldv -lmpeg3 -lstdc++ -lGLU -lGL -ldl -lz -lm -lpthread -lfreenect
+ LIBS = -shared -Wl,--export-dynamic -L/usr/lib -lpthread -lm -lz -ldl -ldv -lstdc++ -lGLU -lGL -lfreenect
  EXTENSION = pd_linux
 endif
 ifeq ($(UNAME),Darwin)
