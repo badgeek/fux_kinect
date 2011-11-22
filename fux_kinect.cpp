@@ -100,11 +100,11 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
 	  }
   }
 
-  depth_mid = (uint8_t*)malloc(640*480*3);
-  depth_front = (uint8_t*)malloc(640*480*3);
-  rgb_back = (uint8_t*)malloc(640*480*3);
-  rgb_mid = (uint8_t*)malloc(640*480*3);
-  rgb_front = (uint8_t*)malloc(640*480*3);
+  depth_mid = (uint8_t*)malloc(640*480);
+  depth_front = (uint8_t*)malloc(640*480);
+  //rgb_back = (uint8_t*)malloc(640*480*3);
+  //rgb_mid = (uint8_t*)malloc(640*480*3);
+  //rgb_front = (uint8_t*)malloc(640*480*3);
 
   got_rgb = 0;
   got_depth = 0;
