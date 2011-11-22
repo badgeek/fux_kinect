@@ -34,7 +34,7 @@ CPPEXTERN_NEW_WITH_GIMME(fux_kinect)
 /////////////////////////////////////////////////////////
 
 static pthread_cond_t  gl_frame_cond = PTHREAD_COND_INITIALIZER;
-static pthread_mutex_t *gl_backbuf_mutex;
+static pthread_mutex_t gl_backbuf_mutex = PTHREAD_MUTEX_INITIALIZER; 
 
 uint8_t *rgb_back, *rgb_mid, *rgb_front;
 uint16_t t_gamma[2048];
@@ -70,16 +70,19 @@ fux_kinect :: fux_kinect(int argc, t_atom *argv)
   kinect_angle     = 0;
  
   //create mutex  
-  gl_backbuf_mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
-  if(gl_backbuf_mutex){
-    if ( pthread_mutex_init(gl_backbuf_mutex, NULL) < 0 ) {
-      free(gl_backbuf_mutex);
-      gl_backbuf_mutex=NULL;
-    } 
-  }
+  //gl_backbuf_mutex = (pthread_mutex_t*) malloc(sizeof(pthread_mutex_t));
+  //if(&gl_backbuf_mutex){
+   // if ( pthread_mutex_init(&gl_backbuf_mutex, NULL) < 0 ) {
+      //free(&gl_backbuf_mutex);
+      //&gl_backbuf_mutex=NULL;
+    //} 
+  //}
+
+  pthread_mutex_init(&gl_backbuf_mutex, NULL);
 
  // gl_frame_cond = (pthread_cond_t*) malloc(sizeof(pthread_mutex_t));
-  //pthread_cond_init(gl_frame_cond, NULL);
+  
+  pthread_cond_init(&gl_frame_cond, NULL);
 
 
   if (freenect_init(&f_ctx, NULL) < 0) {
@@ -171,7 +174,7 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
 	int i;
 	uint16_t *depth = (uint16_t*)v_depth;
 
-	pthread_mutex_lock(gl_backbuf_mutex);
+	pthread_mutex_lock(&gl_backbuf_mutex);
 	
 	int depth_range = kinect_max - kinect_min;
 
@@ -202,7 +205,7 @@ void fux_kinect::depth_cb(freenect_device *dev, void *v_depth, uint32_t timestam
     
 	got_depth++;
 	pthread_cond_signal(&gl_frame_cond);
-	pthread_mutex_unlock(gl_backbuf_mutex);
+	pthread_mutex_unlock(&gl_backbuf_mutex);
 }
 
 void fux_kinect::rgb_cb(freenect_device *dev, void *rgb, uint32_t timestamp)
@@ -245,7 +248,7 @@ fux_kinect :: ~fux_kinect()
 /////////////////////////////////////////////////////////
 void fux_kinect :: render(GemState *state)
 {
-	pthread_mutex_lock(gl_backbuf_mutex);
+	pthread_mutex_lock(&gl_backbuf_mutex);
 	// When using YUV_RGB mode, RGB frames only arrive at 15Hz, so we shouldn't force them to draw in lock-step.
 	// However, this is CPU/GPU intensive when we are receiving frames in lockstep.
 	//if (current_format == FREENECT_VIDEO_YUV_RGB) {
@@ -259,7 +262,7 @@ void fux_kinect :: render(GemState *state)
 	//}
 
 	if (requested_format != current_format) {
-		pthread_mutex_unlock(gl_backbuf_mutex);
+		pthread_mutex_unlock(&gl_backbuf_mutex);
 		return;
 	}
 
@@ -279,7 +282,7 @@ void fux_kinect :: render(GemState *state)
 	//	got_rgb = 0;
 	//}
 		
-	pthread_mutex_unlock(gl_backbuf_mutex);
+	pthread_mutex_unlock(&gl_backbuf_mutex);
 	
 	unsigned char *pixels = m_pixBlock.image.data;
 	
