@@ -17,7 +17,6 @@ LOG
 
 #include "Base/GemBase.h"
 #include "Base/GemPixUtil.h"
-//#include "FreeImage.h"
 #include "libfreenect.h"
 
 #include <pthread.h>
@@ -70,8 +69,8 @@ class GEM_EXTERN fux_kinect : public GemBase
 
     	// When a angle is received
     	virtual void kinectAngle(float gsize);
-	virtual void kinectMin(int gsize);
-	virtual void kinectMax(int gsize);
+        virtual void kinectMin(int gsize);
+        virtual void kinectMax(int gsize);
 
 		///start rendering
 		virtual void	startRendering();
@@ -123,27 +122,27 @@ class GEM_EXTERN fux_kinect : public GemBase
 		
     private:
     	
-    //////////
-    // static member functions
-	static void kinectAngleCallback(void *data, t_floatarg size);	
-	static void kinectMaxCallback(void *data, t_floatarg size);	
-	static void kinectMinCallback(void *data, t_floatarg size);	
-	
-	freenect_context *f_ctx;
-	freenect_device *f_dev;	
+        //////////
+        // static member functions
+    	static void kinectAngleCallback(void *data, t_floatarg size);	
+    	static void kinectMaxCallback(void *data, t_floatarg size);	
+    	static void kinectMinCallback(void *data, t_floatarg size);	
+    	
+    	freenect_context *f_ctx;
+    	freenect_device *f_dev;	
 
-	freenect_video_format requested_format;
-	freenect_video_format current_format;
-		
-	pthread_t freenect_thread;
+    	freenect_video_format requested_format;
+    	freenect_video_format current_format;
+    		
+    	pthread_t freenect_thread;
 
-	int kinect_angle;
-	int kinect_video_size;
-	int kinect_multiply;
-	int kinect_resolution;
-	
-	
-	bool banged;
+    	int kinect_angle;
+    	int kinect_video_size;
+    	int kinect_multiply;
+    	int kinect_resolution;
+    	
+    	
+    	bool banged;
 
 };
 

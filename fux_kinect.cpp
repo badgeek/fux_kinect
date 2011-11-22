@@ -131,12 +131,12 @@ void *fux_kinect::freenect_thread_func(void*target)
 	
 	freenect_set_led(me->f_dev,LED_GREEN);
 	freenect_set_depth_callback(me->f_dev, me->depth_cb);
-	freenect_set_video_callback(me->f_dev, me->rgb_cb);
-	freenect_set_video_mode(me->f_dev, freenect_find_video_mode(FREENECT_RESOLUTION_MEDIUM, me->current_format));
+	//freenect_set_video_callback(me->f_dev, me->rgb_cb);
+	//freenect_set_video_mode(me->f_dev, freenect_find_video_mode(FREENECT_RESOLUTION_MEDIUM, me->current_format));
 	freenect_set_depth_mode(me->f_dev, freenect_find_depth_mode(FREENECT_RESOLUTION_MEDIUM, FREENECT_DEPTH_11BIT));
-	freenect_set_video_buffer(me->f_dev, rgb_back);
+	//freenect_set_video_buffer(me->f_dev, rgb_back);
 	freenect_start_depth(me->f_dev);
-	freenect_start_video(me->f_dev);
+	//freenect_start_video(me->f_dev);
 		
 	int accelCount = 0;
 
@@ -154,9 +154,9 @@ void *fux_kinect::freenect_thread_func(void*target)
 		}*/
 
 		if (me->requested_format != me->current_format) {
-			freenect_stop_video(me->f_dev);
-			freenect_set_video_mode(me->f_dev, freenect_find_video_mode(FREENECT_RESOLUTION_MEDIUM, me->requested_format));
-			freenect_start_video(me->f_dev);
+			//freenect_stop_video(me->f_dev);
+			//freenect_set_video_mode(me->f_dev, freenect_find_video_mode(FREENECT_RESOLUTION_MEDIUM, me->requested_format));
+			//freenect_start_video(me->f_dev);
 			me->current_format = me->requested_format;
 		}
 	}
@@ -230,7 +230,7 @@ fux_kinect :: ~fux_kinect()
 {
     cleanImage();
 	freenect_stop_depth(f_dev);
-	freenect_stop_video(f_dev);
+	//freenect_stop_video(f_dev);
 	freenect_close_device(f_dev);
 	freenect_shutdown(f_ctx);
 	free(depth_mid);
